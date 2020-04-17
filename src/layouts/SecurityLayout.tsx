@@ -1,14 +1,13 @@
 import React from 'react';
-import { connect } from 'dva';
-import { Redirect } from 'umi';
+import { PageLoading } from '@ant-design/pro-layout';
+import { Redirect, connect, ConnectProps } from 'umi';
 import { stringify } from 'querystring';
-import { ConnectState, ConnectProps } from '@/models/connect';
+import { ConnectState } from '@/models/connect';
 import { CurrentUser } from '@/models/user';
-import PageLoading from '@/components/PageLoading';
 
 interface SecurityLayoutProps extends ConnectProps {
-  loading: boolean;
-  currentUser: CurrentUser;
+  loading?: boolean;
+  currentUser?: CurrentUser;
 }
 
 interface SecurityLayoutState {
@@ -45,8 +44,8 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
     if ((!isLogin && loading) || !isReady) {
       return <PageLoading />;
     }
-    if (!isLogin) {
-      return <Redirect to={`/user/login?${queryString}`}></Redirect>;
+    if (!isLogin && window.location.pathname !== '/user/login') {
+      return <Redirect to={`/user/login?${queryString}`} />;
     }
     return children;
   }
